@@ -162,6 +162,7 @@ range_reader<T> range(const T &low, const T &high)
 
 template <class T>
 struct oneof_reader{
+  oneof_reader() : alt() {}
   T operator()(const std::string &s){
     T ret=default_reader<T>()(s);
     if (std::find(alt.begin(), alt.end(), s)==alt.end())
@@ -302,7 +303,7 @@ oneof_reader<T> oneof(T a1, T a2, T a3, T a4, T a5, T a6, T a7, T a8, T a9, T a1
 
 class parser{
 public:
-  parser(){
+  parser() : options(), ordered(), ftr(), prog_name(), others(), errors() {
   }
   ~parser(){
     for (std::map<std::string, option_base*>::iterator p=options.begin();
@@ -647,7 +648,7 @@ private:
 		      bool need,
 		      const T &def,
 		      const std::string &desc)
-      : nam(name), snam(short_name), need(need), has(false)
+      : nam(name), snam(short_name), need(need), desc(), has(false)
       , def(def), actual(def) {
       this->desc=full_description(desc);
     }
